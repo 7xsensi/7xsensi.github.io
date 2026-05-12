@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>7xSensi Vermelho & Preto</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:linear-gradient(180deg,#000,#1a0000);
+    color:#fff;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:430px;
+    background:#111;
+    border:2px solid red;
+    border-radius:25px;
+    padding:20px;
+    box-shadow:0 0 30px red;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.logo h1{
+    color:red;
+    font-size:40px;
+    text-shadow:0 0 15px red;
+}
+
+.logo p{
+    color:#aaa;
+    margin-top:5px;
+}
+
+.card{
+    background:#1a1a1a;
+    border:1px solid red;
+    border-radius:15px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    color:#ff4d4d;
+    font-weight:bold;
+}
+
+select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid red;
+    background:#000;
+    color:white;
+    font-size:15px;
+}
+
+input[type=range]{
+    width:100%;
+    accent-color:red;
+}
+
+.value{
+    text-align:right;
+    margin-top:5px;
+    color:#fff;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+    margin-top:10px;
+}
+
+.generate{
+    background:red;
+    color:white;
+    box-shadow:0 0 15px red;
+}
+
+.generate:hover{
+    transform:scale(1.03);
+    background:#ff1a1a;
+}
+
+.fire{
+    background:#000;
+    border:2px solid red;
+    color:red;
+    box-shadow:0 0 15px red;
+}
+
+.fire:hover{
+    background:red;
+    color:white;
+}
+
+.result{
+    display:none;
+    margin-top:20px;
+    background:#0d0d0d;
+    border:1px solid red;
+    border-radius:15px;
+    padding:15px;
+    animation:fade .4s;
+}
+
+.result h2{
+    color:red;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.result p{
+    margin:8px 0;
+}
+
+.shot{
+    display:none;
+    text-align:center;
+    margin-top:15px;
+    animation:boom .5s infinite alternate;
+}
+
+.footer{
+    text-align:center;
+    margin-top:20px;
+    color:#666;
+    font-size:12px;
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes boom{
+    from{
+        transform:scale(1);
+    }
+    to{
+        transform:scale(1.2);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <h1>7xSensi</h1>
+        <p>Gerador PRO Android</p>
+    </div>
+
+    <!-- ANDROID -->
+    <div class="card">
+        <label>Escolha o Android</label>
+        <select id="android" onchange="mudarLinhas()">
+            <option>Samsung</option>
+            <option>Xiaomi</option>
+            <option>Motorola</option>
+            <option>Realme</option>
+            <option>Poco</option>
+            <option>Infinix</option>
+            <option>Asus Rog</option>
+        </select>
+    </div>
+
+    <!-- LINHA -->
+    <div class="card">
+        <label>Linha do Celular</label>
+        <select id="linha">
+            <option>Galaxy A</option>
+            <option>Galaxy S</option>
+        </select>
+    </div>
+
+    <!-- SENSIBILIDADES -->
+    <div class="card">
+        <label>Geral</label>
+        <input type="range" min="0" max="200" value="100" id="geral">
+        <div class="value" id="v1">100</div>
+    </div>
+
+    <div class="card">
+        <label>Ponto Vermelho</label>
+        <input type="range" min="0" max="200" value="90" id="red">
+        <div class="value" id="v2">90</div>
+    </div>
+
+    <div class="card">
+        <label>Mira 2x</label>
+        <input type="range" min="0" max="200" value="80" id="x2">
+        <div class="value" id="v3">80</div>
+    </div>
+
+    <div class="card">
+        <label>Mira 4x</label>
+        <input type="range" min="0" max="200" value="70" id="x4">
+        <div class="value" id="v4">70</div>
+    </div>
+
+    <div class="card">
+        <label>AWM</label>
+        <input type="range" min="0" max="200" value="50" id="awm">
+        <div class="value" id="v5">50</div>
+    </div>
+
+    <!-- BOTAO -->
+    <div class="card">
+        <label>Tamanho do Botão de Atirar</label>
+        <input type="range" min="10" max="100" value="50" id="btnsize">
+        <div class="value" id="v6">50%</div>
+    </div>
+
+    <button class="generate" onclick="gerarSensi()">
+        GERAR SENSI
+    </button>
+
+    <button class="fire" id="fireBtn" onclick="atirar()">
+        🔥 ATIRAR
+    </button>
+
+    <div class="shot" id="shot">
+        💥💥💥
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="result" id="resultado">
+
+        <h2>SENSI GERADA</h2>
+
+        <p id="r0"></p>
+        <p id="r00"></p>
+
+        <p id="r1"></p>
+        <p id="r2"></p>
+        <p id="r3"></p>
+        <p id="r4"></p>
+        <p id="r5"></p>
+        <p id="r6"></p>
+
+    </div>
+
+    <div class="footer">
+        © 2026 - 7xSensi Vermelho & Preto
+    </div>
+
+</div>
+
+<script>
+
+// sliders
+const sliders = [
+["geral","v1"],
+["red","v2"],
+["x2","v3"],
+["x4","v4"],
+["awm","v5"],
+["btnsize","v6"]
+];
+
+sliders.forEach(item=>{
+
+    const slider = document.getElementById(item[0]);
+    const value = document.getElementById(item[1]);
+
+    slider.oninput = ()=>{
+
+        if(item[0] === "btnsize"){
+            value.innerHTML = slider.value + "%";
+
+            // muda tamanho do botão
+            document.getElementById("fireBtn").style.fontSize =
+            (slider.value / 3) + "px";
+
+            document.getElementById("fireBtn").style.padding =
+            (slider.value / 2) + "px";
+        }
+        else{
+            value.innerHTML = slider.value;
+        }
+    }
+});
+
+// mudar linhas automaticamente
+function mudarLinhas(){
+
+    const android = document.getElementById("android").value;
+    const linha = document.getElementById("linha");
+
+    linha.innerHTML = "";
+
+    let modelos = [];
+
+    if(android === "Samsung"){
+        modelos = ["Galaxy A","Galaxy S","Galaxy M"];
+    }
+
+    if(android === "Xiaomi"){
+        modelos = ["Redmi","Poco","Mi"];
+    }
+
+    if(android === "Motorola"){
+        modelos = ["Moto G","Edge","E Series"];
+    }
+
+    if(android === "Realme"){
+        modelos = ["Realme C","Narzo","GT"];
+    }
+
+    if(android === "Poco"){
+        modelos = ["Poco X","Poco F","Poco M"];
+    }
+
+    if(android === "Infinix"){
+        modelos = ["Hot","Note","Zero"];
+    }
+
+    if(android === "Asus Rog"){
+        modelos = ["ROG Phone 5","ROG Phone 6","ROG Phone 7"];
+    }
+
+    modelos.forEach(modelo=>{
+
+        let option = document.createElement("option");
+        option.text = modelo;
+
+        linha.add(option);
+    });
+}
+
+mudarLinhas();
+
+function gerarSensi(){
+
+    const android = document.getElementById("android").value;
+    const linha = document.getElementById("linha").value;
+
+    let boost = 0;
+
+    if(android === "Samsung") boost = 5;
+    if(android === "Xiaomi") boost = 10;
+    if(android === "Poco") boost = 12;
+    if(android === "Asus Rog") boost = 20;
+
+    const geral = random(80,200)+boost;
+    const red = random(70,200)+boost;
+    const x2 = random(60,180)+boost;
+    const x4 = random(50,170)+boost;
+    const awm = random(20,120)+boost;
+    const btn = random(35,85);
+
+    document.getElementById("r0").innerHTML =
+    "📱 Android: <b>"+android+"</b>";
+
+    document.getElementById("r00").innerHTML =
+    "📲 Linha: <b>"+linha+"</b>";
+
+    document.getElementById("r1").innerHTML =
+    "🎯 Geral: <b>"+geral+"</b>";
+
+    document.getElementById("r2").innerHTML =
+    "🔴 Ponto Vermelho: <b>"+red+"</b>";
+
+    document.getElementById("r3").innerHTML =
+    "🔍 Mira 2x: <b>"+x2+"</b>";
+
+    document.getElementById("r4").innerHTML =
+    "🎯 Mira 4x: <b>"+x4+"</b>";
+
+    document.getElementById("r5").innerHTML =
+    "💥 AWM: <b>"+awm+"</b>";
+
+    document.getElementById("r6").innerHTML =
+    "🔥 Botão de Atirar: <b>"+btn+"%</b>";
+
+    document.getElementById("resultado").style.display = "block";
+}
+
+function atirar(){
+
+    const shot = document.getElementById("shot");
+
+    shot.style.display = "block";
+
+    navigator.vibrate?.(200);
+
+    setTimeout(()=>{
+        shot.style.display = "none";
+    },1000);
+
+    const audio = new Audio(
+    "https://actions.google.com/sounds/v1/impacts/explosion.ogg"
+    );
+
+    audio.play();
+}
+
+function random(min,max){
+    return Math.floor(Math.random()*(max-min+1))+min;
+}
+
+</script>
+
+</body>
+</html>
