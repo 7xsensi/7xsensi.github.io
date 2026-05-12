@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7xSensi Android</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(180deg,#000,#1a0000);
+    color:white;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:460px;
+    background:#111;
+    border:2px solid red;
+    border-radius:25px;
+    padding:20px;
+    box-shadow:0 0 35px red;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.logo h1{
+    color:red;
+    font-size:42px;
+    text-shadow:0 0 15px red;
+}
+
+.logo p{
+    color:#bbb;
+    margin-top:5px;
+}
+
+.card{
+    background:#1a1a1a;
+    border:1px solid red;
+    border-radius:15px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    color:#ff4d4d;
+    font-weight:bold;
+}
+
+select{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid red;
+    background:#000;
+    color:white;
+    font-size:15px;
+}
+
+input[type=range]{
+    width:100%;
+    accent-color:red;
+}
+
+.value{
+    text-align:right;
+    margin-top:5px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+    margin-top:10px;
+}
+
+.generate{
+    background:red;
+    color:white;
+    box-shadow:0 0 15px red;
+}
+
+.generate:hover{
+    transform:scale(1.03);
+}
+
+.fire{
+    background:#000;
+    color:red;
+    border:2px solid red;
+    box-shadow:0 0 15px red;
+}
+
+.fire:hover{
+    background:red;
+    color:white;
+}
+
+.result{
+    display:none;
+    margin-top:20px;
+    background:#0d0d0d;
+    border:1px solid red;
+    border-radius:15px;
+    padding:15px;
+}
+
+.result h2{
+    color:red;
+    text-align:center;
+    margin-bottom:10px;
+}
+
+.result p{
+    margin:8px 0;
+}
+
+.shot{
+    display:none;
+    text-align:center;
+    font-size:45px;
+    margin-top:15px;
+    animation:boom .5s infinite alternate;
+}
+
+.footer{
+    text-align:center;
+    margin-top:20px;
+    color:#666;
+    font-size:12px;
+}
+
+@keyframes boom{
+    from{
+        transform:scale(1);
+    }
+    to{
+        transform:scale(1.2);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <h1>7xSensi</h1>
+        <p>Gerador Android Completo</p>
+    </div>
+
+    <!-- MARCA -->
+    <div class="card">
+        <label>Escolha a Marca</label>
+
+        <select id="marca" onchange="mudarModelos()">
+
+            <option>Samsung</option>
+            <option>Motorola</option>
+            <option>Xiaomi</option>
+            <option>Poco</option>
+            <option>Realme</option>
+            <option>Infinix</option>
+            <option>Asus</option>
+
+        </select>
+    </div>
+
+    <!-- MODELO -->
+    <div class="card">
+        <label>Linha do Celular</label>
+
+        <select id="modelo"></select>
+    </div>
+
+    <!-- DPI -->
+    <div class="card">
+        <label>DPI</label>
+
+        <input type="range" min="100" max="800" value="400" id="dpi">
+
+        <div class="value" id="v0">400</div>
+    </div>
+
+    <!-- SENSI -->
+    <div class="card">
+        <label>Geral</label>
+
+        <input type="range" min="0" max="200" value="100" id="geral">
+
+        <div class="value" id="v1">100</div>
+    </div>
+
+    <div class="card">
+        <label>Ponto Vermelho</label>
+
+        <input type="range" min="0" max="200" value="90" id="red">
+
+        <div class="value" id="v2">90</div>
+    </div>
+
+    <div class="card">
+        <label>Mira 2x</label>
+
+        <input type="range" min="0" max="200" value="80" id="x2">
+
+        <div class="value" id="v3">80</div>
+    </div>
+
+    <div class="card">
+        <label>Mira 4x</label>
+
+        <input type="range" min="0" max="200" value="70" id="x4">
+
+        <div class="value" id="v4">70</div>
+    </div>
+
+    <div class="card">
+        <label>AWM</label>
+
+        <input type="range" min="0" max="200" value="50" id="awm">
+
+        <div class="value" id="v5">50</div>
+    </div>
+
+    <!-- BOTAO -->
+    <div class="card">
+        <label>Tamanho do Botão de Atirar</label>
+
+        <input type="range" min="10" max="100" value="50" id="btnsize">
+
+        <div class="value" id="v6">50%</div>
+    </div>
+
+    <button class="generate" onclick="gerarSensi()">
+        GERAR SENSI
+    </button>
+
+    <button class="fire" id="fireBtn" onclick="atirar()">
+        🔥 BOTÃO DE ATIRAR
+    </button>
+
+    <div class="shot" id="shot">
+        💥💥💥
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="result" id="resultado">
+
+        <h2>SENSI GERADA</h2>
+
+        <p id="r0"></p>
+        <p id="r00"></p>
+        <p id="r01"></p>
+
+        <p id="r1"></p>
+        <p id="r2"></p>
+        <p id="r3"></p>
+        <p id="r4"></p>
+        <p id="r5"></p>
+        <p id="r6"></p>
+
+    </div>
+
+    <div class="footer">
+        © 2026 - 7xSensi Android
+    </div>
+
+</div>
+
+<script>
+
+// sliders
+const sliders = [
+["dpi","v0"],
+["geral","v1"],
+["red","v2"],
+["x2","v3"],
+["x4","v4"],
+["awm","v5"],
+["btnsize","v6"]
+];
+
+sliders.forEach(item=>{
+
+    const slider = document.getElementById(item[0]);
+    const value = document.getElementById(item[1]);
+
+    slider.oninput = ()=>{
+
+        if(item[0] === "btnsize"){
+
+            value.innerHTML = slider.value + "%";
+
+            document.getElementById("fireBtn").style.fontSize =
+            (slider.value / 3) + "px";
+
+            document.getElementById("fireBtn").style.padding =
+            (slider.value / 2) + "px";
+
+        }else{
+
+            value.innerHTML = slider.value;
+        }
+    }
+});
+
+// MODELOS
+const celulares = {
+
+Samsung:[
+"Galaxy J2","Galaxy J5","Galaxy J7",
+"Galaxy A10","Galaxy A11","Galaxy A12",
+"Galaxy A13","Galaxy A14","Galaxy A20",
+"Galaxy A21","Galaxy A22","Galaxy A23",
+"Galaxy A24","Galaxy A30","Galaxy A31",
+"Galaxy A32","Galaxy A33","Galaxy A34",
+"Galaxy A50","Galaxy A51","Galaxy A52",
+"Galaxy A53","Galaxy S9","Galaxy S10",
+"Galaxy S20","Galaxy S21","Galaxy S22",
+"Galaxy S23 Ultra"
+],
+
+Motorola:[
+"Moto G5","Moto G6","Moto G7",
+"Moto G8","Moto G9","Moto G10",
+"Moto G14","Moto G20","Moto G22",
+"Moto G30","Moto G31","Moto G32",
+"Moto G41","Moto G42","Moto G52",
+"Moto G53","Moto G54","Moto G60",
+"Moto G62","Moto G71","Moto G73",
+"Moto G82","Moto Edge 20",
+"Moto Edge 30","Moto Edge 40"
+],
+
+Xiaomi:[
+"Redmi Note 8","Redmi Note 9",
+"Redmi Note 10","Redmi Note 11",
+"Redmi Note 12","Mi 11","Mi 12"
+],
+
+Poco:[
+"Poco X3","Poco X5","Poco F4","Poco M4"
+],
+
+Realme:[
+"Realme C55","Realme Narzo 50","Realme GT Neo"
+],
+
+Infinix:[
+"Infinix Hot 20","Infinix Note 12","Infinix Zero"
+],
+
+Asus:[
+"ROG Phone 5","ROG Phone 6","Zenfone 9"
+]
+
+};
+
+// mudar modelos
+function mudarModelos(){
+
+    const marca = document.getElementById("marca").value;
+    const modelo = document.getElementById("modelo");
+
+    modelo.innerHTML = "";
+
+    celulares[marca].forEach(item=>{
+
+        let option = document.createElement("option");
+
+        option.text = item;
+
+        modelo.add(option);
+    });
+}
+
+mudarModelos();
+
+// gerar sensi
+function gerarSensi(){
+
+    const marca = document.getElementById("marca").value;
+    const modelo = document.getElementById("modelo").value;
+    const dpi = document.getElementById("dpi").value;
+
+    let boost = 0;
+
+    if(marca === "Samsung") boost = 5;
+    if(marca === "Motorola") boost = 7;
+    if(marca === "Xiaomi") boost = 10;
+    if(marca === "Poco") boost = 15;
+    if(marca === "Asus") boost = 20;
+
+    const geral = random(80,200)+boost;
+    const red = random(70,200)+boost;
+    const x2 = random(60,180)+boost;
+    const x4 = random(50,170)+boost;
+    const awm = random(20,120)+boost;
+    const btn = random(35,90);
+
+    document.getElementById("r0").innerHTML =
+    "📱 Marca: <b>"+marca+"</b>";
+
+    document.getElementById("r00").innerHTML =
+    "📲 Modelo: <b>"+modelo+"</b>";
+
+    document.getElementById("r01").innerHTML =
+    "⚡ DPI: <b>"+dpi+"</b>";
+
+    document.getElementById("r1").innerHTML =
+    "🎯 Geral: <b>"+geral+"</b>";
+
+    document.getElementById("r2").innerHTML =
+    "🔴 Ponto Vermelho: <b>"+red+"</b>";
+
+    document.getElementById("r3").innerHTML =
+    "🔍 Mira 2x: <b>"+x2+"</b>";
+
+    document.getElementById("r4").innerHTML =
+    "🎯 Mira 4x: <b>"+x4+"</b>";
+
+    document.getElementById("r5").innerHTML =
+    "💥 AWM: <b>"+awm+"</b>";
+
+    document.getElementById("r6").innerHTML =
+
+    document.getElementById("resultado").style.display = "block";
+}
+
+// atirar
+function atirar(){
+
+    const shot = document.getElementById("shot");
+
+    shot.style.display = "block";
+
+    navigator.vibrate?.(200);
+
+    setTimeout(()=>{
+        shot.style.display = "none";
+    },1000);
+
+    const audio = new Audio(
+    "https://actions.google.com/sounds/v1/impacts/explosion.ogg"
+    );
+
+    audio.play();
+}
+
+// random
+function random(min,max){
+    return Math.floor(Math.random()*(max-min+1))+min;
+}
+
+</script>
+
+</body>
+</html>
